@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - realtime-service
+    restart: always
+
+  backend:
+    build: ./backend
+    expose:
+      - "8001"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+      - DB_NAME=saree_live
+      - PORT=8001
+      # On EC2, you might want to point to Atlas instead of local mongo for production
+      # - MONGO_URL=${MONGO_URL}
+    depends_on:
+      - mongo
+    restart: always
+
+  realtime-service:
+    build: ./realtime-service
+    expose:
+      - "8002"
+    environment:
+      - REALTIME_PORT=8002
+      - MONGO_URL=mongodb://mongo:27017
+      - DB_NAME=saree_live
+      - BACKEND_URL=http://backend:8001
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mongo
+      - redis
+      - backend
+    restart: always
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+volumes:
+  mongo-data:
