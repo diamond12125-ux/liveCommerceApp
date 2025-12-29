@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Facebook, Youtube, Instagram, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
-import axios from 'axios';
+import api from '../services/api';
 
 const ConnectAccountsPage = () => {
   const navigate = useNavigate();
@@ -21,10 +21,11 @@ const ConnectAccountsPage = () => {
 
   const checkConnections = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/social/connections`);
+      const response = await api.get('/social/connections');
       setConnections(response.data);
     } catch (error) {
       console.error('Failed to check connections:', error);
+      toast.error('Unable to load social connections. Please login and try again.');
     }
   };
 
@@ -80,7 +81,7 @@ const ConnectAccountsPage = () => {
 
   const disconnectAccount = async (platform) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/social/disconnect/${platform}`);
+      await api.post(`/social/disconnect/${platform}`);
       toast.success(`${platform} disconnected successfully`);
       checkConnections();
     } catch (error) {
