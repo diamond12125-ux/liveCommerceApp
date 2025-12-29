@@ -49,7 +49,7 @@ const ConnectAccountsPage = () => {
     const clientId = process.env.REACT_APP_YOUTUBE_CLIENT_ID || process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
     if (!clientId) {
-      toast.error('YouTube OAuth not configured. Please set REACT_APP_YOUTUBE_CLIENT_ID in .env file');
+      toast.error('YouTube OAuth not configured. Please REACT_APP_YOUTUBE_CLIENT_ID in .env file');
       return;
     }
 
