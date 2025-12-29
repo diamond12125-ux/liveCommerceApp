@@ -12,7 +12,7 @@ Write-Host "Preparing deployment for $EC2_HOST..."
 
 # 1. Create a deployment archive
 Write-Host "Creating deployment package..."
-$exclude = @("node_modules", ".git", ".env", "build", "dist", "*.pem")
+$exclude = @("node_modules", ".git", ".env", "build", "dist", "*.pem", "frontend-legacy")
 Compress-Archive -Path "backend", "frontend", "realtime-service", "docker-compose.yml", "setup_ec2.sh" -DestinationPath "deploy_package.zip" -Force
 
 # 2. Copy files to EC2
